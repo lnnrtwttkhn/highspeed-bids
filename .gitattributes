@@ -6,3 +6,4 @@ CHANGES annex.largefiles=nothing
 README annex.largefiles=nothing
 code/** annex.largefiles=nothing
 dataset_description.json annex.largefiles=nothing
+highspeed-bids.Rproj annex.largefiles=nothing
