@@ -14,16 +14,20 @@
 # DEFINE ALL PATHS:
 # ==============================================================================
 PATH_BASE="${HOME}"
+# path to the project root directory
+PATH_ROOT="${PATH_BASE}/highspeed"
 # define the name of the project:
-PROJECT_NAME="highspeed"
+PROJECT_NAME="highspeed-bids"
+# define the path to the project folder:
+PATH_PROJECT="${PATH_ROOT}/${PROJECT_NAME}"
 # define the path to the input directory:
-PATH_INPUT="${PATH_BASE}/${PROJECT_NAME}/rawdata/mri"
+PATH_INPUT="${PATH_PROJECT}/mri"
 # define the path to the output directory
-PATH_OUTPUT="${PATH_BASE}/${PROJECT_NAME}/bids"
+PATH_OUTPUT="${PATH_PROJECT}"
 # define the path to the singularity container:
-PATH_CONTAINER="${PATH_BASE}/tools/heudiconv/heudiconv_0.6.0.sif"
+PATH_CONTAINER="${PATH_PROJECT}/tools/heudiconv/heudiconv_0.6.0.sif"
 # define the path to the code main directory:
-PATH_CODE="${PATH_BASE}/${PROJECT_NAME}/${PROJECT_NAME}_analysis/code"
+PATH_CODE="${PATH_PROJECT}/code"
 # path to the heudiconv heuristic file:
 HEURISTIC_FILE="highspeed_heudiconv_heuristic.py"
 # define path to the python executable file that anonymizes the subject ids:
@@ -31,17 +35,12 @@ ANON_FILE="highspeed_heudiconv_anonymizer.py"
 # make the anonymizer file executable:
 chmod +x "${PATH_CODE}/heudiconv/$ANON_FILE"
 # path to the directory where error and out path_logs of cluster jobs are saved:
-PATH_LOGS="${PATH_BASE}/${PROJECT_NAME}/logs/heudiconv/$(date '+%Y%m%d_%H%M%S')"
+PATH_LOGS="${PATH_PROJECT}/logs/heudiconv/$(date '+%Y%m%d_%H%M%S')"
 # path to the text file with all subject ids:
-PATH_SUB_LIST="${PATH_CODE}/parameters/highspeed_participant_list.txt"
+PATH_SUB_LIST="${PATH_CODE}/highspeed-participant-list.txt"
 # ==============================================================================
 # CREATE RELEVANT DIRECTORIES:
 # ==============================================================================
-# create output directory:
-if [ ! -d ${PATH_OUTPUT} ]; then
-	mkdir -p ${PATH_OUTPUT}
-	echo "created ${PATH_OUTPUT}"
-fi
 # create directory for log files:
 if [ ! -d ${PATH_LOGS} ]; then
 	mkdir -p ${PATH_LOGS}

@@ -4,7 +4,7 @@
 # ==============================================================================
 # SCRIPT: ANONYMIZE PARTICIPANT IDS DURING BIDS-CONVERSION WITH HEUDICONV
 # PROJECT: HIGHSPEED
-# WRITTEN BY LENNART WITTKUHN, 2018 - 2019
+# WRITTEN BY LENNART WITTKUHN, 2018 - 2020
 # CONTACT: WITTKUHN AT MPIB HYPHEN BERLIN DOT MPG DOT DE
 # MAX PLANCK RESEARCH GROUP NEUROCODE
 # MAX PLANCK INSTITUTE FOR HUMAN DEVELOPMENT
@@ -16,11 +16,8 @@ import sys
 import os
 # define paths depending on the operating systen:
 if 'linux' in sys.platform:
-    # define the root path:
-    #path_root = os.path.join("/home", "mpib", "wittkuhn", "highspeed")
-    #path_code = os.path.join(path_root, "highspeed_analysis", "code")
     # define the path to the text file containg the subject IDs:
-    path_sublist = os.path.join("/code", "parameters", "highspeed_participant_list.txt")
+    path_sublist = os.path.join("/code", "highspeed-participant-list.txt")
 # retrieve the user input:
 ids_orig = open(path_sublist, "r").read().splitlines()
 # define the number of subjects:
