@@ -36,19 +36,62 @@ if (basename(here::here()) == "highspeed"){
 
 # BIDS conversion
 
-## Heudiconv
+## Step 1: Conversion of MRI data to the Brain Imaging Data Structure (BIDS) using HeuDiConv
 
-### Heuristic file
+### Overview
+
+After MRI was acquired at the MRI scanner, we converted all data to adhere to the [Brain Imaging Data Structure (BIDS)](http://bids.neuroimaging.io/) standard.
+Please see the [paper by Gorgoleski et al., 2016, *Scientific Data*](https://www.nature.com/articles/sdata201644) for details.
+In short, BIDS is a community standard for organizing and describing MRI datasets.
+
+### Code and software
+
+We used [HeuDiConv](https://github.com/nipy/heudiconv), version 0.6.0, to convert our MRI DICOM data to the BIDS structure.
+First, we created a Singularity container with HeuDiConv in our cluster environment at the Max Planck Institute for Human Development, Berlin Germany.
+
+```bash
+singularity pull docker://nipy/heudiconv:0.6.0
+```
+
+For the conversion of DICOM data from the scanner to BIDS-converted Nifti-files the following scripts were used (these scripts can be found in the in the `code/heudiconv/` directory):
+
+#### Mapping raw DICOMS to BIDS: `highspeed-heudiconv-heuristic.py`
+
+`highspeed_heudiconv_heuristic.py` is a Python script, that creates a mapping between the DICOMS and the Nifti-converted files in the BIDS structure.
 
 ```{python, echo=TRUE, code=readLines(file.path(path_root, "code", "heudiconv", "highspeed-heudiconv-heuristic.py")), eval=FALSE, python.reticulate=FALSE}
 ```
 
-### Anonymizer file
+#### Changing participant IDs: `highspeed-heudiconv-anonymizer.py`
+
+`highspeed-heudiconv-anonymizer.py` is an executable Python script, which is used in combination with the `--anon-cmd` flag of the `heudiconv` command that turns the original participant IDs (that we used when we ran the study in the lab) into consecutive zero-padded numbers (see [this thread on neurostars.org](https://neurostars.org/t/heudiconv-how-to-turn-subject-ids-into-consecutive-zero-padded-numbers-as-required-by-bids/2240) for details)
 
 ```{python, echo=TRUE, code=readLines(file.path(path_root, "code", "heudiconv", "highspeed-heudiconv-anonymizer.py")), eval=FALSE, python.reticulate=FALSE}
 ```
 
-### Cluster file
+
+#### Running `heudiconv` on the cluster: `highspeed-heudiconv-cluster.sh`
+
+`highspeed-heudiconv-cluster.sh` is a bash script that parallelizes the HeuDiConv command for each participant on the high-performance cluster of the Max Planck Institute for Human Development Berlin, Germany.
 
 ```{bash, echo=TRUE, code=readLines(file.path(path_root, "code", "heudiconv", "highspeed-heudiconv-cluster.sh")), eval=FALSE}
 ```
+
+As a side note, the last step is not really necessary since zero-padded numbers are not required by the BIDS standard.
+
+We acquired both pre-normalized and non-normalized MRI data (see e.g., [here](https://practicalfmri.blogspot.com/2012/04/common-persistent-epi-artifacts-receive.html) for more information on pre-normalization).
+All analyses reported in the paper were based on the **pre-normalized data**.
+Only the pre-normalized data set is published because uploading the dataset in two versions (with- and without pre-normalization) would otherwise cause interference when running fMRIPrep (see [here](https://neurostars.org/t/addressing-multiple-t1w-images/4959)).
+
+### Resources
+
+The following resources helped along the way (thank you, people on the internet!):
+
+* [Heudiconv documentation](https://heudiconv.readthedocs.io/en/latest/index.html)
+* ["Heudiconv: Example Usage" - Tutorial by James Kent](https://slides.com/jameskent/deck-3#/)
+* ["Heudiconv on multiple subjects" - Discussion on neurostars.org](https://neurostars.org/t/heudiconv-on-multiple-subjects/1344)
+* ["Heudiconv across multiple sessions" - Discussion on neurostars.org](https://neurostars.org/t/heudiconv-across-multiple-sessions/1281/9)
+* ["Heudiconv: How to turn subject IDs into consecutive zero-padded numbers as required by BIDS?" - Discussion on neurostars.org](https://neurostars.org/t/heudiconv-how-to-turn-subject-ids-into-consecutive-zero-padded-numbers-as-required-by-bids/2240)
+* ["DICOM to BIDS conversion" - A YouTube tutorial](https://www.youtube.com/watch?time_continue=4&v=pAv9WuyyF3g)
+* ["BIDS Tutorial Series: HeuDiConv Walkthrough" - A tutorial by the Stanford Center for Reproducible Neuroscience](http://reproducibility.stanford.edu/bids-tutorial-series-part-2a/)
+
