@@ -18,13 +18,17 @@ PATH_BASE="${HOME}"
 # define the name of the current task:
 TASK_NAME="pydeface"
 # define the name of the project:
-PROJECT_NAME="highspeed"
-# path to the singularity container:
-PATH_CONTAINER=${PATH_BASE}/tools/${TASK_NAME}/${TASK_NAME}_37-2e0c2d.sif
+PATH_ROOT="${PATH_BASE}/highspeed"
+# define the name of the project:
+PROJECT_NAME="highspeed-bids"
+# define the path to the project folder:
+PATH_PROJECT="${PATH_ROOT}/${PROJECT_NAME}"
+# define the path to the singularity container:
+PATH_CONTAINER="${PATH_PROJECT}/tools/${TASK_NAME}/${TASK_NAME}_37-2e0c2d.sif"
 # path to the log directory:
-PATH_LOG=${PATH_BASE}/${PROJECT_NAME}/logs/${TASK_NAME}
-# path to the data directory (in bids format):
-PATH_BIDS=${PATH_BASE}/${PROJECT_NAME}/bids
+PATH_LOG="${PATH_PROJECT}/logs/${TASK_NAME}"
+# path to the data directory (in BIDS format):
+PATH_BIDS="${PATH_PROJECT}"
 # ==============================================================================
 # CREATE RELEVANT DIRECTORIES:
 # ==============================================================================
@@ -42,6 +46,8 @@ fi
 N_CPUS=1
 # memory demand in *MB*
 MEM_MB=500
+# memory demand in *GB*
+MEM_GB="$((${MEM_MB} / 1000))"
 # memory demand in *KB*
 MEM_KB="$((${MEM_MB} * 1000))"
 # ==============================================================================
@@ -52,23 +58,24 @@ for FILE in ${PATH_BIDS}/*/*/anat/*T1w.nii.gz; do
 	FILE_BASENAME="$(basename -- $FILE)"
 	# get the parent directory:
 	FILE_PARENT="$(dirname "$FILE")"
+	# create cluster job:
+	echo "#!/bin/bash" > job
 	# name of the job
-	echo "#PBS -N pydeface_${FILE_BASENAME}" >> job
+	echo "#SBATCH --job-name pydeface_${FILE_BASENAME}" >> job
 	# set the expected maximum running time for the job:
-	echo "#PBS -l walltime=1:00:00" >> job
+	echo "#SBATCH --time 1:00:00" >> job
 	# determine how much RAM your operation needs:
-	echo "#PBS -l mem=${MEM_KB}kb" >> job
+	echo "#SBATCH --mem ${MEM_GB}GB" >> job
 	# email notification on abort/end, use 'n' for no notification:
-	echo "#PBS -m n" >> job
-	# write (output) log to log folder
-	echo "#PBS -o ${PATH_LOG}" >> job
-	# write (error) log to log folder
-	echo "#PBS -e ${PATH_LOG}" >> job
+	echo "#SBATCH --mail-type NONE" >> job
+	# writelog to log folder
+	echo "#SBATCH --output ${PATH_LOG}/slurm-%j.out" >> job
 	# request multiple cpus
-	echo "#PBS -l nodes=1:ppn=${N_CPUS}" >> job
+	echo "#SBATCH --cpus-per-task ${N_CPUS}" >> job
 	# define the main command:
-	echo "singularity run -B ${FILE_PARENT}:/input:rw ${PATH_CONTAINER} pydeface /input/${FILE_BASENAME} --force" >> job
+	echo "singularity run -B ${FILE_PARENT}:/input:rw ${PATH_CONTAINER} \
+	pydeface /input/${FILE_BASENAME} --force" >> job
 	# submit job to cluster queue and remove it to avoid confusion:
-	qsub job
+	sbatch job
 	rm -f job
 done

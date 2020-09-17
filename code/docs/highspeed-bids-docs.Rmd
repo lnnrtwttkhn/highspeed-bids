@@ -40,24 +40,27 @@ if (basename(here::here()) == "highspeed"){
 
 ### Overview
 
-After MRI was acquired at the MRI scanner, we converted all data to adhere to the [Brain Imaging Data Structure (BIDS)](http://bids.neuroimaging.io/) standard.
+After MRI data was acquired at the MRI scanner, we converted all data to adhere to the [Brain Imaging Data Structure (BIDS)](http://bids.neuroimaging.io/) standard.
 Please see the [paper by Gorgoleski et al., 2016, *Scientific Data*](https://www.nature.com/articles/sdata201644) for details.
 In short, BIDS is a community standard for organizing and describing MRI datasets.
 
 ### Code and software
 
+#### `heudiconv` container, version 0.6.0
+
 We used [HeuDiConv](https://github.com/nipy/heudiconv), version 0.6.0, to convert our MRI DICOM data to the BIDS structure.
 First, we created a Singularity container with HeuDiConv in our cluster environment at the Max Planck Institute for Human Development, Berlin Germany.
+The Singularity container is separately available at [https://github.com/lnnrtwttkhn/tools](https://github.com/lnnrtwttkhn/tools) and was created using:
 
 ```bash
 singularity pull docker://nipy/heudiconv:0.6.0
 ```
 
-For the conversion of DICOM data from the scanner to BIDS-converted Nifti-files the following scripts were used (these scripts can be found in the in the `code/heudiconv/` directory):
+For the conversion of DICOM data acquired at the MRI scanner to BIDS-converted NIfTI-files the following scripts were used (these scripts can be found in the in the `code/heudiconv/` directory):
 
 #### Mapping raw DICOMS to BIDS: `highspeed-heudiconv-heuristic.py`
 
-`highspeed_heudiconv_heuristic.py` is a Python script, that creates a mapping between the DICOMS and the Nifti-converted files in the BIDS structure.
+`highspeed_heudiconv_heuristic.py` is a Python script, that creates a mapping between the DICOMS and the NIfTI-converted files in the BIDS structure.
 
 ```{python, echo=TRUE, code=readLines(file.path(path_root, "code", "heudiconv", "highspeed-heudiconv-heuristic.py")), eval=FALSE, python.reticulate=FALSE}
 ```
@@ -69,6 +72,7 @@ For the conversion of DICOM data from the scanner to BIDS-converted Nifti-files 
 ```{python, echo=TRUE, code=readLines(file.path(path_root, "code", "heudiconv", "highspeed-heudiconv-anonymizer.py")), eval=FALSE, python.reticulate=FALSE}
 ```
 
+As a side note, the last step is not really necessary since zero-padded numbers are not required by the BIDS standard.
 
 #### Running `heudiconv` on the cluster: `highspeed-heudiconv-cluster.sh`
 
@@ -76,8 +80,6 @@ For the conversion of DICOM data from the scanner to BIDS-converted Nifti-files 
 
 ```{bash, echo=TRUE, code=readLines(file.path(path_root, "code", "heudiconv", "highspeed-heudiconv-cluster.sh")), eval=FALSE}
 ```
-
-As a side note, the last step is not really necessary since zero-padded numbers are not required by the BIDS standard.
 
 We acquired both pre-normalized and non-normalized MRI data (see e.g., [here](https://practicalfmri.blogspot.com/2012/04/common-persistent-epi-artifacts-receive.html) for more information on pre-normalization).
 All analyses reported in the paper were based on the **pre-normalized data**.
@@ -95,3 +97,53 @@ The following resources helped along the way (thank you, people on the internet!
 * ["DICOM to BIDS conversion" - A YouTube tutorial](https://www.youtube.com/watch?time_continue=4&v=pAv9WuyyF3g)
 * ["BIDS Tutorial Series: HeuDiConv Walkthrough" - A tutorial by the Stanford Center for Reproducible Neuroscience](http://reproducibility.stanford.edu/bids-tutorial-series-part-2a/)
 
+## Step 2: Removal of facial features using [pydeface](https://github.com/poldracklab/pydeface)
+
+### Overview
+
+Facial features need to be removed from structural images before sharing the data online.
+See the statement from [openfmri.org](https://openfmri.org/de-identification/) below regarding the importance of defacing:
+
+> *To protect the privacy of the individuals who have been scanned we require that all subjects be de-identified before publishing a dataset. For the purposes of fMRI de-facing is the preferred method de-identification of scan data. Skull stripped data will not be accepted for publication.*
+
+and a second statement from the [openneuro.org FAQs](https://openneuro.org/faq):
+
+> *Yes. We recommend using pydeface. Defacing is strongly prefered over skullstripping, because the process is more robust and yields lower chance of accidentally removing brain tissue.*
+
+### Code and software
+
+#### `pydeface` container, version 2.0.0
+
+Defacing of all structural images was performed using [`pydeface`](https://github.com/poldracklab/pydeface), version 2.0.0.
+
+To ensure robustness of the defacing procedure, we used a Singularity container for `pydeface`, which we installed as follows:
+
+```bash
+singularity pull docker://poldracklab/pydeface:37-2e0c2d
+```
+
+All scripts that we used for defacing can be found in the `code/defacing` directory.
+
+#### Defacing structural images: `highspeed-defacing-cluster.sh`
+
+First, we ran `highspeed-defacing-cluster.sh` to deface all structural images that can be found in the corresponding BIDS data set.
+Note, that this script was optimized to run on the high performance cluster of the Max Planck Institute for Human Development, Berlin.
+
+```{bash, echo=TRUE, code=readLines(file.path(path_root, "code", "defacing", "highspeed-defacing-cluster.sh")), eval=FALSE}
+```
+
+#### Replacing defaced with original images: `highspeed-defacing-cleanup.sh`
+
+`pydeface` creates a new file with the ending `T1w_defaced.nii.gz`.
+As `fMRIPrep`, `MRIQC` and other tools need to use the defaced instead of the original image, we need to replace the original with the defaced image.
+This can be done separately after `pydeface` was run.
+
+In order to replace the original structural images with the defaced once ([as recommended](https://neurostars.org/t/defaced-anatomical-data-fails-bids-validator/3636)), we ran `highspeed-defacing-cleanup.sh`.
+
+```{bash, echo=TRUE, code=readLines(file.path(path_root, "code", "defacing", "highspeed-defacing-cleanup.sh")), eval=FALSE}
+```
+
+### Resources
+
+* ["Pydeface defaces structural data only?!"](https://neurostars.org/t/pydeface-defaces-structural-data-only/903) - Discussion on neurostars.org if any other data than structural acquisitions should be defaced (short answer: no!)
+* ["Is/how much fmriprep (freesurfer et al) is resilient to “defacing”?"](https://neurostars.org/t/is-how-much-fmriprep-freesurfer-et-al-is-resilient-to-defacing/2642) - Discussion on neurostars.org if `fMRIPrep` works well with defaced data (short answer: yes!)

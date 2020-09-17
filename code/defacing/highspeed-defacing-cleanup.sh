@@ -20,7 +20,7 @@ TASK_NAME="pydeface"
 # define the name of the project:
 PROJECT_NAME="highspeed"
 # path to the data directory (in bids format):
-PATH_BIDS=${PATH_BASE}/${PROJECT_NAME}/bids
+PATH_BIDS="${PATH_BASE}/${PROJECT_NAME}/highspeed-bids"
 # ==============================================================================
 # REMOVE ORIGINAL T1W IMAGES AND REPLACE WITH DEFACED ONES:
 # ==============================================================================
