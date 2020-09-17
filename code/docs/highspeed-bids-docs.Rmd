@@ -78,6 +78,8 @@ As a side note, the last step is not really necessary since zero-padded numbers 
 
 `highspeed-heudiconv-cluster.sh` is a bash script that parallelizes the HeuDiConv command for each participant on the high-performance cluster of the Max Planck Institute for Human Development Berlin, Germany.
 
+Note, that for privacy concerns we only saved the BIDS-converted data in the repo after running the defacing (see details below).
+
 ```{bash, echo=TRUE, code=readLines(file.path(path_root, "code", "heudiconv", "highspeed-heudiconv-cluster.sh")), eval=FALSE}
 ```
 
@@ -114,7 +116,7 @@ and a second statement from the [openneuro.org FAQs](https://openneuro.org/faq):
 
 #### `pydeface` container, version 2.0.0
 
-Defacing of all structural images was performed using [`pydeface`](https://github.com/poldracklab/pydeface), version 2.0.0.
+Defacing of all structural images was performed using [`pydeface`](https://github.com/poldracklab/pydeface), version 2.0.0. (with nipype version 1.3.0-rc1)
 
 To ensure robustness of the defacing procedure, we used a Singularity container for `pydeface`, which we installed as follows:
 
