@@ -46,8 +46,6 @@ fi
 N_CPUS=1
 # memory demand in *MB*
 MEM_MB=500
-# memory demand in *GB*
-MEM_GB="$((${MEM_MB} / 1000))"
 # memory demand in *KB*
 MEM_KB="$((${MEM_MB} * 1000))"
 # ==============================================================================
@@ -65,7 +63,7 @@ for FILE in ${PATH_BIDS}/*/*/anat/*T1w.nii.gz; do
 	# set the expected maximum running time for the job:
 	echo "#SBATCH --time 1:00:00" >> job
 	# determine how much RAM your operation needs:
-	echo "#SBATCH --mem ${MEM_GB}GB" >> job
+	echo "#SBATCH --mem ${MEM_MB}MB" >> job
 	# email notification on abort/end, use 'n' for no notification:
 	echo "#SBATCH --mail-type NONE" >> job
 	# writelog to log folder
