@@ -21,19 +21,19 @@ PROJECT_NAME="highspeed-bids"
 # define the path to the project folder:
 PATH_PROJECT="${PATH_ROOT}/${PROJECT_NAME}"
 # define the path to the input directory:
-PATH_INPUT="${PATH_PROJECT}/mri"
+PATH_INPUT="${PATH_PROJECT}/input/mri"
 # define the path to the output directory
 PATH_OUTPUT="${PATH_PROJECT}"
 # define the path to the singularity container:
 PATH_CONTAINER="${PATH_PROJECT}/tools/heudiconv/heudiconv_0.6.0.sif"
 # define the path to the code main directory:
-PATH_CODE="${PATH_PROJECT}/code"
+PATH_CODE="${PATH_PROJECT}/code/heudiconv"
 # path to the heudiconv heuristic file:
-HEURISTIC_FILE="highspeed_heudiconv_heuristic.py"
+HEURISTIC_FILE="highspeed-heudiconv-heuristic.py"
 # define path to the python executable file that anonymizes the subject ids:
-ANON_FILE="highspeed_heudiconv_anonymizer.py"
+ANON_FILE="highspeed-heudiconv-anonymizer.py"
 # make the anonymizer file executable:
-chmod +x "${PATH_CODE}/heudiconv/$ANON_FILE"
+chmod +x "${PATH_CODE}/$ANON_FILE"
 # path to the directory where error and out path_logs of cluster jobs are saved:
 PATH_LOGS="${PATH_PROJECT}/logs/heudiconv/$(date '+%Y%m%d_%H%M%S')"
 # path to the text file with all subject ids:
@@ -79,28 +79,32 @@ for SUB in ${SUB_LIST}; do
 			echo "No data input available for sub-${SUB} ses-${SES_PAD}!"
 			continue
 		fi
+		# start slurm job file:
+		echo "#!/bin/bash" > job
 		# name of the job:
-    	echo "#PBS -N heudiconv_sub-${SUB_PAD}_ses-${SES_PAD}" > job
-    	# set the expected maximum running time for the job:
-		echo "#PBS -l walltime=12:00:00" >> job
+    		echo "#SBATCH --job-name heudiconv_sub-${SUB_PAD}_ses-${SES_PAD}" >> job
+		# select partition:
+		echo "#SBATCH --partition gpu" >> job
+    		# set the expected maximum running time for the job:
+		echo "#SBATCH --time 12:00:00" >> job
 		# determine how much RAM your operation needs:
-		echo "#PBS -l mem=${MEM_GB}GB" >> job
+		echo "#SBATCH --mem ${MEM_GB}GB" >> job
 		# request multiple cpus
-		echo "#PBS -l nodes=1:ppn=${N_CPUS}" >> job
-		# write (output) log to log folder:
-		echo "#PBS -o ${PATH_LOGS}" >> job
-		# write (error) log to log folder:
-		echo "#PBS -e ${PATH_LOGS}" >> job
+		echo "#SBATCH --cpus-per-task ${N_CPUS}" >> job
+		# write output and error log to log folder:
+		echo "#SBATCH --output ${PATH_LOGS}/slurm-%j.out" >> job
 		# email notification on abort/end, use 'n' for no notification:
-		echo "#PBS -m n" >> job
+		echo "#SBATCH --mail-type NONE" >> job
+		# set working directory
+		echo "#SBATCH --workdir ." >> job
 		# define the heudiconv command:
 		echo "singularity run -B ${PATH_INPUT}:/input:ro \
 		-B ${PATH_OUTPUT}:/output:rw -B ${PATH_CODE}:/code:ro \
 		${PATH_CONTAINER} -d /input/${DICOM_DIR_TEMPLATE} -s ${SUB} \
-		--ses ${SES_PAD} -o /output -f /code/heudiconv/${HEURISTIC_FILE} \
-		--anon-cmd /code/heudiconv/${ANON_FILE} -c dcm2niix -b --overwrite" >> job
+		--ses ${SES_PAD} -o /output -f /code/${HEURISTIC_FILE} \
+		--anon-cmd /code/${ANON_FILE} -c dcm2niix -b --overwrite" >> job
 		# submit job to cluster queue and remove it to avoid confusion:
-		qsub job
+		sbatch job
 		rm -f job
 	done
 done
