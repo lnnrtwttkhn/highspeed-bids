@@ -52,7 +52,7 @@ fi
 # maximum number of cpus per process:
 N_CPUS=1
 # memory demand in *GB*
-MEM_GB=4
+MEM_GB=5
 # memory demand in *MB*
 MEM_MB="$((${MEM_GB} * 1000))"
 # read subject ids from the list of the text file
