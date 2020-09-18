@@ -1,0 +1,13 @@
+# folders
+logs
+input
+tools
+# files
+highspeed-bids.Rproj
+README.md
+requirements.txt
+datacite.yml
+CHANGES
+LICENSE
+highspeed-sequence-parameters.pdf
+.heudiconv

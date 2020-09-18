@@ -3,7 +3,7 @@
 **/.git* annex.largefiles=nothing
 .bidsignore annex.largefiles=nothing
 CHANGES annex.largefiles=nothing
-README annex.largefiles=nothing
+README.md annex.largefiles=nothing
 code/** annex.largefiles=nothing
 dataset_description.json annex.largefiles=nothing
 highspeed-bids.Rproj annex.largefiles=nothing
