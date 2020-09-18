@@ -17,11 +17,10 @@ import os
 # ======================================================================
 # DEFINE PATHS
 # ======================================================================
-# path to the root directory:
-path_root = os.environ['HOME']
-# path to the data input directory (in bids format):
-path_bids = os.path.join(path_root, 'highspeed', 'bids')
-path_desc = os.path.join(path_bids, 'participants.json')
+# path to the project root:
+project_name = 'highspeed-bids'
+path_root = os.getcwd().split(project_name)[0] + project_name
+path_desc = os.path.join(path_root, 'participants.json')
 # ======================================================================
 # UPDATE DATA-SET DESCRIPTION FILE
 # ======================================================================
