@@ -193,7 +193,8 @@ To detect the provencance of the run command in our DataLad dataset, we run:
 
 ```bash
 datalad run -m "create IntendedFor fields in fieldmap .json files" \
---input "./*/*/*/*.nii.gz" --output "./*/*/fmap/*.json" \ "python3 code/code/bids_conversion/highspeed_bids_fieldmaps.py"
+--input "./*/*/*/*.nii.gz" --output "./*/*/fmap/*.json" \
+"python3 code/code/bids_conversion/highspeed_bids_fieldmaps.py"
 ```
 
 ```{python, echo=TRUE, code=readLines(file.path(path_root, "code", "bids_conversion", "highspeed-bids-fieldmaps.py")), eval=FALSE, python.reticulate=FALSE}
