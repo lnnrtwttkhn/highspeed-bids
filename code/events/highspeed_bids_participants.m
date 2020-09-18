@@ -1,18 +1,22 @@
 %% HIGHSPEED: GET DATA OF THE HIGHSPEED TASK
 clear variables; clc; % clear workspace and command window
 
-path_base = '/Volumes/MPRG-Neurocode/Data/highspeed/main_mri/rawdata/';
-path_input = fullfile(path_base, 'behav_main');
-path_tardis = fullfile('/Users/wittkuhn/Volumes/tardis/highspeed');
-path_output = fullfile(path_tardis, 'bids');
-path_digitspan = fullfile(path_base, 'digit_span');
-allID = dlmread('/Users/wittkuhn/highspeed/highspeed_analysis/code/parameters/highspeed_participant_list.txt');
+path_base = strsplit(pwd,'code');
+path_base = path_base{1};
+path_input = fullfile(path_base, 'input', 'behavior', 'main');
+path_output = path_base;
+path_digitspan = fullfile(...
+    path_base, 'input', 'behavior', 'digitspan');
+allID = dlmread(fullfile(...
+    path_base, 'code', 'heudiconv', 'highspeed-participant-list.txt'));
 num_subs = length(allID);
 
 % get data
 dirData = dir(path_input);
 dirData = {dirData.name};
-dataFiles = dirData(contains(dirData,'session_1_run_4') & contains(dirData,cellstr(num2str(allID)))); % search for matching files
+dataFiles = dirData(...
+    contains(dirData,'session_1_run_4') & ...
+    contains(dirData,cellstr(num2str(allID))));
 
 covariates = table;
 covariates.participant_id = cell(num_subs,1);
@@ -63,9 +67,11 @@ for sub = 1:num_subs
 end
 
 % WRITE  DATA
-writetable(covariates,fullfile(path_output,'participants.csv'),'Delimiter','\t','WriteRowNames',true,...
+writetable(covariates,fullfile(path_output,'participants.csv'), ...
+    'Delimiter','\t','WriteRowNames',true, ...
     'QuoteStrings',true,'WriteVariableNames',true)
-copyfile(fullfile(path_output,'participants.csv'), fullfile(path_output,'participants.tsv'));
+copyfile(fullfile(path_output,'participants.csv'), ...
+    fullfile(path_output,'participants.tsv'));
 delete(fullfile(path_output,'participants.csv'));
 
 

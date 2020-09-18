@@ -193,9 +193,36 @@ To detect the provencance of the run command in our DataLad dataset, we run:
 
 ```bash
 datalad run -m "create IntendedFor fields in fieldmap .json files" \
---input "./*/*/*/*.nii.gz" --output "./*/*/fmap/*.json" \ "python3 code/code/bids_conversion/highspeed_bids_fieldmaps.py ."
+--input "./*/*/*/*.nii.gz" --output "./*/*/fmap/*.json" \ "python3 code/code/bids_conversion/highspeed_bids_fieldmaps.py"
 ```
 
 ```{python, echo=TRUE, code=readLines(file.path(path_root, "code", "bids_conversion", "highspeed-bids-fieldmaps.py")), eval=FALSE, python.reticulate=FALSE}
 ```
 
+#### Creating the `participants.tsv` and `participants.json` files
+
+According to the [BIDS specification, version 1.1.0](https://bids.neuroimaging.io/bids_spec1.1.0.pdf) ...
+
+> [...] the purpose of this file is to describe properties of participants such as age, handedness, sex, etc. In case of single session studies this file has one compulsory column participant_id that consists of sub-<participant_label> , followed by a list of optional columns describing participants. Each participant needs to be described by one and only one row.
+
+In our case, this information was saved in the original behavioral data files that were created when participants performed the task during scanning.
+
+To extract this information from the behavioral files into the `participants.tsv` file we use the `code/events/highspeed_bids_participants.m` file.
+Since wrapping the execution of this script into a `datalad` run command appeared challenging, we just ran the script with paths not self-contained and just saved the changes in files.
+
+First, we had to unlock the `participants.tsv` file using `datalad unlock participants.tsv`
+
+The we ran `highspeed_bids_participants.m` using MATLAB version R2017b and saved the changes using `datalad save`.
+
+```{octave, echo=TRUE, code=readLines(file.path(path_root, "code", "events", "highspeed_bids_participants.m")), eval=FALSE}
+```
+
+Finally, we create the `participants.json` file using:
+```bash
+datalad run -m "create participants.json" \
+--output "participants.json" \
+"python3 code/bids_conversion/highspeed-bids-participants.py"
+```
+
+```{python, echo=TRUE, code=readLines(file.path(path_root, "code", "bids_conversion", "highspeed-bids-participants.py")), eval=FALSE, python.reticulate=FALSE}
+```
