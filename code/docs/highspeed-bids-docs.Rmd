@@ -159,7 +159,27 @@ In order to replace the original structural images with the defaced once ([as re
 * ["Pydeface defaces structural data only?!"](https://neurostars.org/t/pydeface-defaces-structural-data-only/903) - Discussion on neurostars.org if any other data than structural acquisitions should be defaced (short answer: no!)
 * ["Is/how much fmriprep (freesurfer et al) is resilient to “defacing”?"](https://neurostars.org/t/is-how-much-fmriprep-freesurfer-et-al-is-resilient-to-defacing/2642) - Discussion on neurostars.org if `fMRIPrep` works well with defaced data (short answer: yes!)
 
-## Step 3: Adding additional information to the BIDS dataset
+## Step 3: Adding BIDS `*events.tsv` files
+
+### Overview
+
+According to the [BIDS specification](https://bids-specification.readthedocs.io/en/stable/04-modality-specific-files/05-task-events.html) ...
+
+> The purpose of this file is to describe timing and other properties of events recorded during the scan.
+
+Thus, we transformed all behavioral data that was acquired during the scanning sessions to run-specific `*events.tsv` files that are compatible with the BIDS standard.
+
+### Code and software
+
+We mainly used two MATLAB files that were run in MATLAB version R2017b. The code takes the original behavioral data files acquired during scanning as input and returns run-specific BIDS-compatible `*events.tsv` files.
+
+```{octave, echo=TRUE, code=readLines(file.path(path_root, "code", "events", "highspeed_bids_events.m")), eval=FALSE}
+```
+
+```{octave, echo=TRUE, code=readLines(file.path(path_root, "code", "events", "extract_bids_events.m")), eval=FALSE}
+```
+
+## Step 4: Adding additional information to the BIDS dataset
 
 ### Code and software
 
