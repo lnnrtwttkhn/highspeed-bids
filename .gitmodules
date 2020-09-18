@@ -2,3 +2,7 @@
 	path = tools
 	url = https://github.com/lnnrtwttkhn/tools.git
 	datalad-id = f86aafdc-f826-11ea-a009-d4ae5294d597
+[submodule "input/behavior"]
+	path = input/behavior
+	url = https://github.com/lnnrtwttkhn/highspeed-data-behavior.git
+	datalad-id = 5225df0c-f98e-11ea-8942-acde48001122
