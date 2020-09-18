@@ -17,16 +17,17 @@
 import os
 import glob
 import json
-import sys
 import stat
 # ======================================================================
 # DEFINE PATHS
 # ======================================================================
 # to run type python3 bids_fieldmaps_info.py $PATH_BIDS
 # where $PATH_BIDS is the path to your BIDS directory
-path_bids = str(sys.argv[1])
-path_fmap = os.path.join(path_bids, '*', '*', 'fmap', '*.json')
-path_func = os.path.join(path_bids, '*', '*', 'func', '*.nii.gz')
+# path to the project root:
+project_name = 'highspeed-bids'
+path_root = os.getcwd().split(project_name)[0] + project_name
+path_fmap = os.path.join(path_root, '*', '*', 'fmap', '*.json')
+path_func = os.path.join(path_root, '*', '*', 'func', '*.nii.gz')
 # ======================================================================
 # UPDATE FIELDMAP JSON FILES
 # ======================================================================
