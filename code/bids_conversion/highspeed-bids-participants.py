@@ -26,13 +26,39 @@ path_desc = os.path.join(path_root, 'participants.json')
 # ======================================================================
 # update fields of the json file:
 json_desc = dict()
-json_desc["participant_id"] = "Participant identifier"
-json_desc["age"] = "Age, in years as in the first session"
-json_desc["sex"] = "Sex, self-rated by participant, m for male / f for female / o for other"
-json_desc["handedness"] = "Handedness, self-rated by participant; note that participants were required to be right-handed"
-json_desc["digit_span"] = "Total score in Digit-Span Test (Petermann & Wechsler, 2012), assessing working memory capacity"
-json_desc["randomization"] = "Pseudo-randomized group assignment for selection of sequences in sequence trials"
-json_desc["session_interval"] = "Interval in days between the two experimental sessions"
+json_desc["participant_id"] = {
+        "Description": "Participant identifier"
+        }
+json_desc["age"] = {
+        "Description": "Age, in years as in the first session",
+        "Units": "years"
+        }
+json_desc["sex"] = {
+        "Description": "Sex, self-rated by participant",
+        "Levels": {
+            "m": "male",
+            "f": "female",
+            "o": "other"
+            }
+        }
+json_desc["handedness"] = {
+        "Description": "Handedness, self-rated by participant; note that participants were required to be right-handed",
+        "Levels": {
+            "right": "right",
+            "left": "left"
+            }
+        }
+json_desc["digit_span"] = {
+        "Description": "Total score in Digit-Span Test (Petermann & Wechsler, 2012), assessing working memory capacity",
+        "Units": "total scores"
+        }
+json_desc["randomization"] = {
+        "Description": "Pseudo-randomized group assignment for selection of sequences in sequence trials"
+        }
+json_desc["session_interval"] = {
+        "Description:": "Interval in days between the two experimental sessions",
+        "Units": "days"
+        }
 # save updated data-set_description.json file:
 with open(path_desc, 'w') as outfile:
     json.dump(json_desc, outfile, indent=4)
