@@ -9,3 +9,4 @@ dataset_description.json annex.largefiles=nothing
 highspeed-bids.Rproj annex.largefiles=nothing
 LICENSE annex.largefiles=nothing
 datacite.yml annex.largefiles=nothing
+requirements.txt annex.largefiles=nothing
