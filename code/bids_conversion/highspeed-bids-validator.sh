@@ -16,8 +16,8 @@
 PATH_BASE="${HOME}"
 PROJECT="highspeed"
 PATH_CONTAINER="${PATH_BASE}/tools/bids_validator/validator_1.3.12.sif"
-PATH_INPUT="${PATH_BASE}/${PROJECT}/bids"
-PATH_OUTPUT="${PATH_BASE}/${PROJECT}/derivatives/bids_validator"
+PATH_INPUT="${PATH_BASE}/${PROJECT}/highspeed-bids"
+PATH_OUTPUT="${PATH_BASE}/tmp/bids_validator"
 # ==============================================================================
 # CREATE RELEVANT DIRECTORIES:
 # ==============================================================================
@@ -30,6 +30,6 @@ fi
 # RUN BIDS-VALIDATOR:
 # ==============================================================================
 # run bids-validator and save the output in a text file:
-singularity run -B ${PATH_INPUT}:/input:ro ${PATH_CONTAINER} /input/ | tee -a ${PATH_OUTPUT}/bids_validation.txt
+singularity run --contain -B ${PATH_INPUT}:/input:ro ${PATH_CONTAINER} /input/ | tee -a ${PATH_OUTPUT}/bids_validation.txt
 # run the bids-validator and save the output in a .json file:
-singularity run -B ${PATH_INPUT}:/input:ro ${PATH_CONTAINER} /input/ --json | tee -a ${PATH_OUTPUT}/bids_validation.json
+singularity run --contain -B ${PATH_INPUT}:/input:ro ${PATH_CONTAINER} /input/ --json | tee -a ${PATH_OUTPUT}/bids_validation.json
