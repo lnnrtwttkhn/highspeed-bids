@@ -71,7 +71,7 @@ for FILE in ${PATH_BIDS}/*/*/anat/*T1w.nii.gz; do
 	# request multiple cpus
 	echo "#SBATCH --cpus-per-task ${N_CPUS}" >> job
 	# define the main command:
-	echo "singularity run -B ${FILE_PARENT}:/input:rw ${PATH_CONTAINER} \
+	echo "singularity run --contain -B ${FILE_PARENT}:/input:rw ${PATH_CONTAINER} \
 	pydeface /input/${FILE_BASENAME} --force" >> job
 	# submit job to cluster queue and remove it to avoid confusion:
 	sbatch job

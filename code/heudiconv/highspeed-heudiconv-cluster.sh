@@ -52,7 +52,7 @@ fi
 # maximum number of cpus per process:
 N_CPUS=1
 # memory demand in *GB*
-MEM_GB=5
+MEM_GB=6
 # memory demand in *MB*
 MEM_MB="$((${MEM_GB} * 1000))"
 # read subject ids from the list of the text file
@@ -92,13 +92,13 @@ for SUB in ${SUB_LIST}; do
 		# request multiple cpus
 		echo "#SBATCH --cpus-per-task ${N_CPUS}" >> job
 		# write output and error log to log folder:
-		echo "#SBATCH --output ${PATH_LOGS}/slurm-%j.out" >> job
+		echo "#SBATCH --output ${PATH_LOGS}/slurm-heudiconv-%j.out" >> job
 		# email notification on abort/end, use 'n' for no notification:
 		echo "#SBATCH --mail-type NONE" >> job
 		# set working directory
 		echo "#SBATCH --workdir ." >> job
 		# define the heudiconv command:
-		echo "singularity run -B ${PATH_INPUT}:/input:ro \
+		echo "singularity run --contain -B ${PATH_INPUT}:/input:ro \
 		-B ${PATH_OUTPUT}:/output:rw -B ${PATH_CODE}:/code:ro \
 		${PATH_CONTAINER} -d /input/${DICOM_DIR_TEMPLATE} -s ${SUB} \
 		--ses ${SES_PAD} -o /output -f /code/${HEURISTIC_FILE} \

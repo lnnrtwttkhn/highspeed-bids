@@ -1,21 +1,23 @@
 {
-    "Acknowledgements": "This work was funded by a research group grant awarded to NWS by the Max Planck Society (M.TN.A.BILD0004). We thank Eran Eldar, Sam Hall-McMaster and Ondrej Zika for helpful comments on a previous version of this manuscript, Gregor Caregnato for help with participant recruitment and data collection, Anika Loewe, Sonali Beckmann and Nadine Taube for assistance with MRI data acquisition, Lion Schulz for help with behavioral data analysis, Michael Krause for support with cluster computing and all participants for their participation. Lennart Wittkuhn is a pre-doctoral fellow of the International Max Planck Research School on Computational Methods in Psychiatry and Ageing Research (IMPRS COMP2PSYCH). The participating institutions are the Max Planck Institute for Human Development, Berlin, Germany, and University College London, London, UK. For more information, see https://www.mps-ucl-centre.mpg.de/en/comp2psych.",
+    "Acknowledgements": "TODO: whom you want to acknowledge",
     "Authors": [
-        "Lennart Wittkuhn",
-        "Nicolas W. Schuck"
+        "TODO:",
+        "First1 Last1",
+        "First2 Last2",
+        "..."
     ],
     "BIDSVersion": "1.0.1",
-    "DatasetDOI": "https://gin.g-node.org/lnnrtwttkhn/highspeed-bids/",
+    "DatasetDOI": "TODO: eventually a DOI for the dataset",
     "Funding": [
-        "M.TN.A.BILD0004"
+        "TODO",
+        "GRANT #1",
+        "GRANT #2"
     ],
-    "HowToAcknowledge": "Please cite: Wittkuhn, L. and Schuck, N. W. (2020). Faster than thought: Detecting sub-second activation sequences with sequential fMRI pattern analysis. bioRxiv. doi: 10.1101/2020.02.15.950667",
-    "License": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0",
-    "Name": "Faster than thought: Detecting sub-second activation sequences with sequential fMRI pattern analysis",
+    "HowToAcknowledge": "TODO: describe how to acknowledge -- either cite a corresponding paper, or just in acknowledgement section",
+    "License": "TODO: choose a license, e.g. PDDL (http://opendatacommons.org/licenses/pddl/)",
+    "Name": "TODO: name of the dataset",
     "ReferencesAndLinks": [
-        "Wittkuhn, L. and Schuck, N. W. (2020). Faster than thought: Detecting sub-second activation sequences with sequential fMRI pattern analysis. bioRxiv. doi: 10.1101/2020.02.15.950667"
-    ],
-    "EthicsApprovals": [
-        "The research protocol was approved by the ethics commission of the German Psychological Society (DPGs), reference number: NS 012018"
+        "TODO",
+        "List of papers or websites"
     ]
 }
