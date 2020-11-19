@@ -23,7 +23,7 @@ header-includes:
 email: wittkuhn@mpib-berlin.mpg.de
 ---
 
-```{r, libraries, echo=FALSE, message=FALSE, include=FALSE}
+```{r, echo=FALSE, message=FALSE, include=FALSE}
 if (!requireNamespace("pacman")) install.packages("pacman")
 packages_cran <- c("here")
 pacman::p_load(char = packages_cran)
