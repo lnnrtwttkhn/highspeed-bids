@@ -37,7 +37,7 @@ description: |
 # Lit of keywords the resource should be associated with.
 # Give as many keywords as possible, to make the resource findable.
 keywords:
-  - Neuroscience
+  - cognitive neuroscience
   - functional magnetic resonance imaging
   - hippocampal replay
 
@@ -66,12 +66,14 @@ funding:
 # In the citation field, please provide the full reference, including title, authors, journal etc.
 references:
   -
+    reftype: "IsSupplementTo"
+    citation: "Wittkuhn, L. and Schuck, N. W. (2020). Dynamics of fMRI patterns reflect sub-second activation sequences and reveal replay in human visual cortex. Nature Communications"
+  -
     id: "doi:10.1101/2020.02.15.950667"
     reftype: "IsSupplementTo"
     citation: "Wittkuhn, L. and Schuck, N. W. (2020). Faster than thought: Detecting sub-second activation sequences with sequential fMRI pattern analysis. bioRxiv. doi:10.1101/2020.02.15.950667"
-  -
-    reftype: "IsSupplementTo"
-    citation: "Wittkuhn, L. and Schuck, N. W. (2020). Faster than thought: Detecting sub-second activation sequences with sequential fMRI pattern analysis. bioRxiv. doi:10.1101/2020.02.15.950667"
+
+
 
 
 
