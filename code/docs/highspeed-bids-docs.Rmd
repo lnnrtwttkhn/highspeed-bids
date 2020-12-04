@@ -1,28 +1,3 @@
----
-title: "Faster than thought: Detecting sub-second activation sequences with sequential fMRI pattern analysis"
-subtitle: "Short project title: highspeed"
-author:
-  - Lennart Wittkuhn^[Max Planck Institute for Human Development, wittkuhn@mpib-berlin.mpg.de]
-  - Nicolas W. Schuck^[Max Planck Institute for Human Development, schuck@mpib-berlin.mpg.de]
-date: "Last update: `r format(Sys.time(), '%d %B, %Y')`"
-output:
- html_document:
-    toc: true
-    self_contained: true
-    toc_float: true
-    toc_depth: 3
-    number_sections: true
-    highlight: pygments
-    theme: cosmo
-    df_print: paged
-    fig_caption: true
-fig.align: "center"
-header-includes:
-  - \usepackage{fontspec}
-  - \setmainfont{AgfaRotisSansSerif}
-email: wittkuhn@mpib-berlin.mpg.de
----
-
 ```{r, echo=FALSE, message=FALSE, include=FALSE}
 if (!requireNamespace("pacman")) install.packages("pacman")
 packages_cran <- c("here")
@@ -34,28 +9,28 @@ if (basename(here::here()) == "highspeed"){
 }
 ```
 
-# BIDS conversion
+## BIDS conversion
 
-## Data availability
+### Overview
+
+#### Data availability
 
 The data is freely available from https://github.com/lnnrtwttkhn/highspeed-bids and https://gin.g-node.org/lnnrtwttkhn/highspeed-bids.
 
-## License
+#### License
 
 The BIDS dataset is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0.
 Please see https://creativecommons.org/licenses/by-nc-sa/4.0/ for details.
 
-## Step 1: Conversion of MRI data to the Brain Imaging Data Structure (BIDS) using HeuDiConv
+### Step 1: Conversion of MRI data to the Brain Imaging Data Structure (BIDS) using HeuDiConv
 
-### Overview
+#### Overview
 
 After MRI data was acquired at the MRI scanner, we converted all data to adhere to the [Brain Imaging Data Structure (BIDS)](http://bids.neuroimaging.io/) standard.
 Please see the [paper by Gorgoleski et al., 2016, *Scientific Data*](https://www.nature.com/articles/sdata201644) for details.
 In short, BIDS is a community standard for organizing and describing MRI datasets.
 
-### Code and software
-
-#### `heudiconv` container, version 0.6.0
+#### Container: `heudiconv` container, version 0.6.0
 
 We used [HeuDiConv](https://github.com/nipy/heudiconv), version 0.6.0, to convert our MRI DICOM data to the BIDS structure.
 First, we created a Singularity container with HeuDiConv in our cluster environment at the Max Planck Institute for Human Development, Berlin Germany.
@@ -96,7 +71,7 @@ We acquired both pre-normalized and non-normalized MRI data (see e.g., [here](ht
 All analyses reported in the paper were based on the **pre-normalized data**.
 Only the pre-normalized data set is published because uploading the dataset in two versions (with- and without pre-normalization) would otherwise cause interference when running fMRIPrep (see [here](https://neurostars.org/t/addressing-multiple-t1w-images/4959)).
 
-### Resources
+#### Resources
 
 The following resources helped along the way (thank you, people on the internet!):
 
@@ -108,9 +83,9 @@ The following resources helped along the way (thank you, people on the internet!
 * ["DICOM to BIDS conversion" - A YouTube tutorial](https://www.youtube.com/watch?time_continue=4&v=pAv9WuyyF3g)
 * ["BIDS Tutorial Series: HeuDiConv Walkthrough" - A tutorial by the Stanford Center for Reproducible Neuroscience](http://reproducibility.stanford.edu/bids-tutorial-series-part-2a/)
 
-## Step 2: Removal of facial features using [pydeface](https://github.com/poldracklab/pydeface)
+### Step 2: Removal of facial features using [pydeface](https://github.com/poldracklab/pydeface)
 
-### Overview
+#### Overview
 
 Facial features need to be removed from structural images before sharing the data online.
 See the statement from [openfmri.org](https://openfmri.org/de-identification/) below regarding the importance of defacing:
@@ -121,9 +96,7 @@ and a second statement from the [openneuro.org FAQs](https://openneuro.org/faq):
 
 > *Yes. We recommend using pydeface. Defacing is strongly prefered over skullstripping, because the process is more robust and yields lower chance of accidentally removing brain tissue.*
 
-### Code and software
-
-#### `pydeface` container, version 2.0.0
+#### Container: `pydeface` container, version 2.0.0
 
 Defacing of all structural images was performed using [`pydeface`](https://github.com/poldracklab/pydeface), version 2.0.0. (with nipype version 1.3.0-rc1)
 
@@ -154,14 +127,14 @@ In order to replace the original structural images with the defaced once ([as re
 ```{bash, echo=TRUE, code=readLines(file.path(path_root, "code", "defacing", "highspeed-defacing-cleanup.sh")), eval=FALSE}
 ```
 
-### Resources
+#### Resources
 
 * ["Pydeface defaces structural data only?!"](https://neurostars.org/t/pydeface-defaces-structural-data-only/903) - Discussion on neurostars.org if any other data than structural acquisitions should be defaced (short answer: no!)
 * ["Is/how much fmriprep (freesurfer et al) is resilient to “defacing”?"](https://neurostars.org/t/is-how-much-fmriprep-freesurfer-et-al-is-resilient-to-defacing/2642) - Discussion on neurostars.org if `fMRIPrep` works well with defaced data (short answer: yes!)
 
-## Step 3: Adding BIDS `*events.tsv` files
+### Step 3: Adding BIDS `*events.tsv` files
 
-### Overview
+#### Overview
 
 According to the [BIDS specification](https://bids-specification.readthedocs.io/en/stable/04-modality-specific-files/05-task-events.html) ...
 
@@ -169,7 +142,7 @@ According to the [BIDS specification](https://bids-specification.readthedocs.io/
 
 Thus, we transformed all behavioral data that was acquired during the scanning sessions to run-specific `*events.tsv` files that are compatible with the BIDS standard.
 
-### Code and software
+#### Code and software
 
 We mainly used two MATLAB files that were run in MATLAB version R2017b. The code takes the original behavioral data files acquired during scanning as input and returns run-specific BIDS-compatible `*events.tsv` files.
 
@@ -179,9 +152,9 @@ We mainly used two MATLAB files that were run in MATLAB version R2017b. The code
 ```{octave, echo=TRUE, code=readLines(file.path(path_root, "code", "events", "extract_bids_events.m")), eval=FALSE}
 ```
 
-## Step 4: Adding additional information to the BIDS dataset
+### Step 4: Adding additional information to the BIDS dataset
 
-### Code and software
+#### Code and software
 
 First, we created a virtual environment using Python version 3.8.5 to install all dependencies and required packages.
 
@@ -192,7 +165,7 @@ mkvirtualenv highspeed-bids -p $(which python3)
 ````
 
 ```bash
-(highspeed-bids) lip-osx-003854:highspeed-bids wittkuhn$ python --version
+$ python --version
 Python 3.8.5
 ````
 
