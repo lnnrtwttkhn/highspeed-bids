@@ -12,11 +12,10 @@ Please visit https://wittkuhn.mpib.berlin/highspeed/ for the project website and
 
 ```bash
 $ datalad clone https://gin.g-node.org/lnnrtwttkhn/highspeed-bids
-[INFO   ] Scanning for unlocked files (this may take some time) [INFO   ] access to 1 dataset sibling keeper not auto-enabled, enable with:
-| 		datalad siblings -d "/Users/wittkuhn/Desktop/highspeed-bids" enable -s keeper 
-install(ok): /Users/wittkuhn/Desktop/highspeed-bids (dataset)
-lip-osx-003854:Desktop wittkuhn$ cd highspeed-bids
-lip-osx-003854:highspeed-bids wittkuhn$ datalad get participants.tsv
+[INFO   ] Scanning for unlocked files (this may take some time) [INFO   ]
+install(ok): highspeed-bids (dataset)
+$ cd highspeed-bids
+$ datalad get participants.tsv
 get(ok): participants.tsv (file) [from origin...]
 ```
 

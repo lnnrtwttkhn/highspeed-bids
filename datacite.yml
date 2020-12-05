@@ -18,7 +18,7 @@ authors:
     id: "ORCID:0000-0002-0150-8776"
 
 # A title to describe the published resource.
-title: "Dynamics of fMRI patterns reflect sub-second activation sequences and reveal replay in human visual cortex - BIDS dataset"
+title: "Dynamics of fMRI patterns reflect sub-second activation sequences and reveal replay in human visual cortex - MRI data according to the Brain Imaging Data Structure (BIDS)"
 
 # Additional information about the resource, e.g., a brief abstract.
 description: |
@@ -44,8 +44,8 @@ keywords:
 # License information for this resource. Please provide the license name and/or a link to the license.
 # Please add also a corresponding LICENSE file to the repository.
 license:
-  name: "Creative Commons Attribution-NonCommercial-ShareAlike 4.0"
-  url: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  name: "Creative Commons Attribution-ShareAlike 4.0"
+  url: "https://creativecommons.org/licenses/by-sa/4.0/"
 
 
 
