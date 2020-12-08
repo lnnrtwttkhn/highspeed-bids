@@ -9,7 +9,7 @@ if (basename(here::here()) == "highspeed"){
 }
 ```
 
-## BIDS conversion
+## MRI data to BIDS
 
 ### Overview
 
@@ -19,8 +19,8 @@ The data is freely available from https://github.com/lnnrtwttkhn/highspeed-bids 
 
 #### License
 
-The BIDS dataset is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0.
-Please see https://creativecommons.org/licenses/by-nc-sa/4.0/ for details.
+The dataset is licensed under Creative Commons Attribution-ShareAlike 4.0.
+Please see https://creativecommons.org/licenses/by-sa/4.0/ for details.
 
 ### Step 1: Conversion of MRI data to the Brain Imaging Data Structure (BIDS) using HeuDiConv
 
