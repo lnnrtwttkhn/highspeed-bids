@@ -1,2 +1,3 @@
 762a1cb9-55a0-4b51-a63f-a0b85316d575 autoenable=true location=https://gin.g-node.org/lnnrtwttkhn/highspeed-bids name=gin type=git timestamp=1629384104.559402s
+af0e99c7-c24c-49b1-9c4c-968a0dad9ff7 chunk=50MiB encryption=none externaltype=rclone name=keeper prefix=git-annex rclone_layout=lower target=highspeed-bids type=external timestamp=1604666107.166632s
 af0e99c7-c24c-49b1-9c4c-968a0dad9ff7 chunk=50MiB encryption=none externaltype=rclone name=keeper prefix=git-annex rclone_layout=lower target=highspeed-bids type=external timestamp=1628752145.597292s
